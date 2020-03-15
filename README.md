@@ -1,5 +1,7 @@
 # Astronaut Finder
 
+Allows you to check what astronauts are in space right now
+
 ### How to build use command
  `./gradlew clean build` from the root to run application.
 
