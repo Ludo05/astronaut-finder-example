@@ -23,13 +23,13 @@ spring-web
 Who's in space
 This spring boot application allows you to see who is in space right now.
 
-#How to build use command
+###How to build use command
  `./gradlew clean build` from the root to run application.
 
-#How to run use command
+###How to run use command
  `./gradlew clean bootRun` from the root to run application.
 
-#Endpoints
+###Endpoints
 Available endpoints
 
 `/astronauts`
@@ -62,5 +62,5 @@ Posts astronaut into local List
 `/astronauts/load-local`
 Returns list of local List
 
-#Tests
+###Tests
 Tests have been added to run against `Mockmvc`.
