@@ -1,9 +1,11 @@
 package com.astronautfinder.whosinspace.Service;
 
 import com.astronautfinder.whosinspace.Interface.IAstronautService;
-import com.astronautfinder.whosinspace.Model.AstronautInboundDTO;
+import com.astronautfinder.whosinspace.Model.AstronautsInboundDTO;
 import com.astronautfinder.whosinspace.Model.ClientAstronautDTO;
+import com.astronautfinder.whosinspace.Utils.CraftNotAvailableException;
 import com.astronautfinder.whosinspace.Utils.NoAstronautFoundException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,38 +17,41 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class AstronautServiceImpl implements IAstronautService {
 
-//    @Value("http://api.open-notify.org/astros.json")
-    final String URL = "http://api.open-notify.org/astros.json";
+    @Value("${api.url}")
+    private String URL;
     RestTemplate restTemplate = new RestTemplate();
     List<ClientAstronautDTO> astronauts = new ArrayList<>();
 
-    private AstronautInboundDTO getAstronautObject() {
-        return restTemplate.getForObject(URL, AstronautInboundDTO.class);
+    private AstronautsInboundDTO getAstronautObject() {
+        return restTemplate.getForObject(URL, AstronautsInboundDTO.class);
     }
 
-    public AstronautInboundDTO getAllAstronauts(){
+    public AstronautsInboundDTO getAllAstronauts(){
        return this.getAstronautObject();
     }
 
     public int getNumberOfAstronauts() throws NoAstronautFoundException {
-        AstronautInboundDTO object = getAstronautObject();
-        if(object != null){
-            return object.getNumber();
+        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
+        if(astronautsInboundDTO != null){
+            return astronautsInboundDTO.getNumber();
         } else {
             throw new NoAstronautFoundException("Object returned null");
         }
     }
 
-    public List<ClientAstronautDTO> getAstronautsArray() {
-        AstronautInboundDTO object = getAstronautObject();
-        assert object != null;
-        return object.getPeople();
+    public List<ClientAstronautDTO> getAstronautsArray() throws CraftNotAvailableException {
+        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
+        if(astronautsInboundDTO != null){
+        return astronautsInboundDTO.getPeople();
+        } else {
+            throw new CraftNotAvailableException("Where is my array");
+        }
     }
 
     public List<ClientAstronautDTO> getAstronautsArrayOrderedNames() {
-        AstronautInboundDTO object = getAstronautObject();
-        assert object != null;
-        List<ClientAstronautDTO> astronautDTOList = object.getPeople();
+        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
+        assert astronautsInboundDTO != null;
+        List<ClientAstronautDTO> astronautDTOList = astronautsInboundDTO.getPeople();
         astronautDTOList.sort(Comparator.comparing(ClientAstronautDTO::getLastName));
         return astronautDTOList;
     }
@@ -54,25 +59,25 @@ public class AstronautServiceImpl implements IAstronautService {
 
     public List<String> getAstronautNames(){
         List<String> names = new ArrayList<>();
-        AstronautInboundDTO object = getAstronautObject();
-        assert object != null;
-        object.getPeople().forEach(astronaut -> names.add(astronaut.getName()));
+        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
+        assert astronautsInboundDTO != null;
+        astronautsInboundDTO.getPeople().forEach(astronaut -> names.add(astronaut.getName()));
         return names;
     }
 
     public List<String> getAstronautCraft(){
         List<String> names = new ArrayList<>();
-        AstronautInboundDTO object = getAstronautObject();
-        assert object != null;
-        object.getPeople().forEach(astronaut -> names.add(astronaut.getCraft()));
+        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
+        assert astronautsInboundDTO != null;
+        astronautsInboundDTO.getPeople().forEach(astronaut -> names.add(astronaut.getCraft()));
         return names;
     }
 
     public String getAstronautCraftByName(String name){
-        AstronautInboundDTO object = getAstronautObject();
-        assert object != null;
+        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
+        assert astronautsInboundDTO != null;
         AtomicReference<String> craft = new AtomicReference<>("");
-        object.getPeople().forEach(astronaut -> {
+        astronautsInboundDTO.getPeople().forEach(astronaut -> {
             if(astronaut.getName().equals(name)){
                 craft.set(astronaut.getCraft());
             }
@@ -80,16 +85,19 @@ public class AstronautServiceImpl implements IAstronautService {
         return craft.get();
     }
 
-        public List<String> getAstronautsByCraft(String craft){
+    public List<String> getAstronautsByCraft(String craft) throws CraftNotAvailableException {
         List<String> names = new ArrayList<>();
-        AstronautInboundDTO object = getAstronautObject();
-        assert object != null;
-        object.getPeople().forEach(astronaut -> {
-            if(astronaut.getCraft().equals(craft)){
-                names.add(astronaut.getName());
-            }
-        });
-        return names;
+        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
+        if(astronautsInboundDTO == null) {
+            throw new CraftNotAvailableException("Craft not found.");
+        } else {
+            astronautsInboundDTO.getPeople().forEach(astronaut -> {
+                if (astronaut.getCraft().equals(craft)) {
+                    names.add(astronaut.getName());
+                }
+            });
+            return names;
+        }
     }
 
     public String addCraft(ClientAstronautDTO astronaut) {

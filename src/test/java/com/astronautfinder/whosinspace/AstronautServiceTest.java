@@ -3,7 +3,11 @@ package com.astronautfinder.whosinspace;
 
 import com.astronautfinder.whosinspace.Model.ClientAstronautDTO;
 import com.astronautfinder.whosinspace.Service.AstronautServiceImpl;
+import com.astronautfinder.whosinspace.Utils.CraftNotAvailableException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -13,6 +17,8 @@ import static org.junit.Assert.*;
 
 @SpringBootTest
 public class AstronautServiceTest {
+
+    @Autowired
     private AstronautServiceImpl astronautService;
 
     public AstronautServiceTest() {
@@ -67,4 +73,11 @@ public class AstronautServiceTest {
             add("Jessica Meir");
         }},result);
     }
-}
+
+//    @Test
+//    public void getAstronautsByCraftNameException() {
+//        List<String> result = astronautService.getAstronautsByCraft("NOCRAFT");
+//        Assertions.assertThrows(CraftNotAvailableException.class, (Executable) result);
+//    }
+//
+ }

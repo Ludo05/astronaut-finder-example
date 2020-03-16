@@ -2,9 +2,9 @@ package com.astronautfinder.whosinspace.Model;
 
 import java.util.List;
 
-public class AstronautInboundDTO {
+public class AstronautsInboundDTO {
 
-    public AstronautInboundDTO(){}
+    public AstronautsInboundDTO(){}
 
     private List<ClientAstronautDTO> astronauts;
     private String message;

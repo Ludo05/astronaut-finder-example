@@ -1,8 +1,9 @@
 package com.astronautfinder.whosinspace.Controller;
 
-import com.astronautfinder.whosinspace.Model.AstronautInboundDTO;
+import com.astronautfinder.whosinspace.Model.AstronautsInboundDTO;
 import com.astronautfinder.whosinspace.Model.ClientAstronautDTO;
 import com.astronautfinder.whosinspace.Service.AstronautServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class AstronautController {
 
 
     @GetMapping("")
-    public AstronautInboundDTO getAstronauts() {
+    public AstronautsInboundDTO getAstronauts() {
         return astronautService.getAllAstronauts();
     }
 
