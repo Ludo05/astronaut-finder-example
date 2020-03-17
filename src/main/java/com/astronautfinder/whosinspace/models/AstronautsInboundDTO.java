@@ -1,4 +1,4 @@
-package com.astronautfinder.whosinspace.Model;
+package com.astronautfinder.whosinspace.models;
 
 import java.util.List;
 
@@ -8,6 +8,13 @@ public class AstronautsInboundDTO {
 
     private List<ClientAstronautDTO> astronauts;
     private String message;
+
+    public AstronautsInboundDTO(List<ClientAstronautDTO> astronauts, String message, int number) {
+        this.astronauts = astronauts;
+        this.message = message;
+        this.number = number;
+    }
+
     private int number;
 
 

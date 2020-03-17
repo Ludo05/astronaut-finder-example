@@ -1,34 +1,47 @@
 package com.astronautfinder.whosinspace;
-
-
-import com.astronautfinder.whosinspace.Model.ClientAstronautDTO;
-import com.astronautfinder.whosinspace.Service.AstronautServiceImpl;
-import com.astronautfinder.whosinspace.Utils.CraftNotAvailableException;
-import org.junit.jupiter.api.Assertions;
+import com.astronautfinder.whosinspace.models.ClientAstronautDTO;
+import com.astronautfinder.whosinspace.services.AstronautServiceImpl;
+import com.astronautfinder.whosinspace.mocks.AstronautMockObj;
+import org.junit.Rule;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-@SpringBootTest
 public class AstronautServiceTest {
 
-    @Autowired
+    private AstronautMockObj astronautMockObj;
+
+    @Mock
     private AstronautServiceImpl astronautService;
 
-    public AstronautServiceTest() {
-         this.astronautService = new AstronautServiceImpl();
+
+    public AstronautServiceTest(){
+                astronautService = new AstronautServiceImpl();
     }
+
+    @BeforeEach
+    public void setUp() {
+        astronautMockObj = new AstronautMockObj();
+        Mockito.when(astronautService.getAllAstronauts()).thenReturn(astronautMockObj.returnMockedObject());
+        Mockito.when(astronautService.addCraft(new ClientAstronautDTO())).thenReturn(astronautMockObj.returnMockedObject().getMessage());
+        Mockito.when(astronautService.getNumberOfAstronauts()).thenReturn(astronautMockObj.returnMockedObject().getPeople().size());
+        MockitoAnnotations.initMocks(AstronautServiceImpl.class);
+
+    }
+
 
     @Test
     public void AddAstronautTest(){
-      String result = astronautService.addCraft(new ClientAstronautDTO());
-      assertEquals("Success",result);
+        String result = astronautService.addCraft(new ClientAstronautDTO());
+        assertEquals("success",result);
 
     }
 
@@ -41,13 +54,6 @@ public class AstronautServiceTest {
             add("ISS");
         }}
         ,result);
-    }
-
-    @Test
-    public void getAllAstronauts(){
-        String result = astronautService.addCraft(new ClientAstronautDTO());
-        assertEquals("Success",result);
-
     }
 
     @Test
@@ -68,9 +74,9 @@ public class AstronautServiceTest {
     public void getAstronautNames(){
         List<String> result = astronautService.getAstronautNames();
         assertEquals(new ArrayList<String>(){{
-            add("Andrew Morgan");
-            add("Oleg Skripochka");
-            add("Jessica Meir");
+            add("TestOne");
+            add("TestTwo");
+            add("TestThree");
         }},result);
     }
 

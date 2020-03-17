@@ -1,9 +1,9 @@
-package com.astronautfinder.whosinspace.Interface;
+package com.astronautfinder.whosinspace.interfaces;
 
-import com.astronautfinder.whosinspace.Model.AstronautsInboundDTO;
-import com.astronautfinder.whosinspace.Model.ClientAstronautDTO;
-import com.astronautfinder.whosinspace.Utils.CraftNotAvailableException;
-import com.astronautfinder.whosinspace.Utils.NoAstronautFoundException;
+import com.astronautfinder.whosinspace.models.AstronautsInboundDTO;
+import com.astronautfinder.whosinspace.models.ClientAstronautDTO;
+import com.astronautfinder.whosinspace.utils.CraftNotAvailableException;
+import com.astronautfinder.whosinspace.utils.NoAstronautFoundException;
 
 import java.util.List;
 

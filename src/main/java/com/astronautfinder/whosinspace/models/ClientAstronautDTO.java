@@ -1,8 +1,13 @@
-package com.astronautfinder.whosinspace.Model;
+package com.astronautfinder.whosinspace.models;
 
 public class ClientAstronautDTO {
 
     public ClientAstronautDTO(){}
+
+    public ClientAstronautDTO(String craft, String name) {
+        this.craft = craft;
+        this.name = name;
+    }
 
     public String getCraft() {
         return craft;

@@ -1,10 +1,10 @@
-package com.astronautfinder.whosinspace.Service;
+package com.astronautfinder.whosinspace.services;
 
-import com.astronautfinder.whosinspace.Interface.IAstronautService;
-import com.astronautfinder.whosinspace.Model.AstronautsInboundDTO;
-import com.astronautfinder.whosinspace.Model.ClientAstronautDTO;
-import com.astronautfinder.whosinspace.Utils.CraftNotAvailableException;
-import com.astronautfinder.whosinspace.Utils.NoAstronautFoundException;
+import com.astronautfinder.whosinspace.interfaces.IAstronautService;
+import com.astronautfinder.whosinspace.models.AstronautsInboundDTO;
+import com.astronautfinder.whosinspace.models.ClientAstronautDTO;
+import com.astronautfinder.whosinspace.utils.CraftNotAvailableException;
+import com.astronautfinder.whosinspace.utils.NoAstronautFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,8 +17,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class AstronautServiceImpl implements IAstronautService {
 
-    @Value("${api.url}")
-    private String URL;
+//    @Value("${api.url}")
+    final String URL = "http://api.open-notify.org/astros.json";
     RestTemplate restTemplate = new RestTemplate();
     List<ClientAstronautDTO> astronauts = new ArrayList<>();
 

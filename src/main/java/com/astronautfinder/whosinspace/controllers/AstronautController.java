@@ -1,9 +1,8 @@
-package com.astronautfinder.whosinspace.Controller;
+package com.astronautfinder.whosinspace.controllers;
 
-import com.astronautfinder.whosinspace.Model.AstronautsInboundDTO;
-import com.astronautfinder.whosinspace.Model.ClientAstronautDTO;
-import com.astronautfinder.whosinspace.Service.AstronautServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.astronautfinder.whosinspace.models.AstronautsInboundDTO;
+import com.astronautfinder.whosinspace.models.ClientAstronautDTO;
+import com.astronautfinder.whosinspace.services.AstronautServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

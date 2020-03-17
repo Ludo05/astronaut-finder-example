@@ -1,4 +1,4 @@
-package com.astronautfinder.whosinspace.Utils;
+package com.astronautfinder.whosinspace.utils;
 
 public class CraftNotAvailableException extends ArrayStoreException {
 
