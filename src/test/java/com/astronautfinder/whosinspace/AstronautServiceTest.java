@@ -15,17 +15,13 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@RunWith(Mockito)
 public class AstronautServiceTest {
 
     private AstronautMockObj astronautMockObj;
 
-    @Mock
-    private AstronautServiceImpl astronautService;
-
-
-    public AstronautServiceTest(){
-                astronautService = new AstronautServiceImpl();
-    }
+    @Spy
+    private AstronautServiceImpl astronautService = new AstronautServiceImpl();;
 
     @BeforeEach
     public void setUp() {
@@ -33,7 +29,6 @@ public class AstronautServiceTest {
         Mockito.when(astronautService.getAllAstronauts()).thenReturn(astronautMockObj.returnMockedObject());
         Mockito.when(astronautService.addCraft(new ClientAstronautDTO())).thenReturn(astronautMockObj.returnMockedObject().getMessage());
         Mockito.when(astronautService.getNumberOfAstronauts()).thenReturn(astronautMockObj.returnMockedObject().getPeople().size());
-        MockitoAnnotations.initMocks(AstronautServiceImpl.class);
 
     }
 
