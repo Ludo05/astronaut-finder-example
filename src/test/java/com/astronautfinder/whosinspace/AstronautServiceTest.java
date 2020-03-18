@@ -2,42 +2,40 @@ package com.astronautfinder.whosinspace;
 import com.astronautfinder.whosinspace.models.ClientAstronautDTO;
 import com.astronautfinder.whosinspace.services.AstronautServiceImpl;
 import com.astronautfinder.whosinspace.mocks.AstronautMockObj;
-import org.junit.Rule;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-@RunWith(Mockito)
+@RunWith(MockitoJUnitRunner.class)
 public class AstronautServiceTest {
 
-    private AstronautMockObj astronautMockObj;
+    @Mock private AstronautMockObj astronautMockObj;
+    @Spy private AstronautServiceImpl astronautService = new AstronautServiceImpl();
 
-    @Spy
-    private AstronautServiceImpl astronautService = new AstronautServiceImpl();;
-
-    @BeforeEach
+    @Before
     public void setUp() {
-        astronautMockObj = new AstronautMockObj();
         Mockito.when(astronautService.getAllAstronauts()).thenReturn(astronautMockObj.returnMockedObject());
         Mockito.when(astronautService.addCraft(new ClientAstronautDTO())).thenReturn(astronautMockObj.returnMockedObject().getMessage());
         Mockito.when(astronautService.getNumberOfAstronauts()).thenReturn(astronautMockObj.returnMockedObject().getPeople().size());
-
+        Mockito.when(astronautService.getAstronautNames()).thenReturn(Collections.singletonList("Hello"));
     }
-
 
     @Test
     public void AddAstronautTest(){
         String result = astronautService.addCraft(new ClientAstronautDTO());
-        assertEquals("success",result);
-
+        System.out.println(result);
+        assertEquals("Success",result);
     }
 
     @Test
@@ -54,7 +52,7 @@ public class AstronautServiceTest {
     @Test
     public void getNumberOfAstronauts(){
         int result = astronautService.getNumberOfAstronauts();
-        assertEquals(3,result);
+        assertEquals(2,result);
 
     }
 

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 public class AstronautServiceImpl implements IAstronautService {
@@ -58,19 +59,17 @@ public class AstronautServiceImpl implements IAstronautService {
 
 
     public List<String> getAstronautNames(){
-        List<String> names = new ArrayList<>();
         AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
         assert astronautsInboundDTO != null;
-        astronautsInboundDTO.getPeople().forEach(astronaut -> names.add(astronaut.getName()));
-        return names;
+        return astronautsInboundDTO.getPeople().stream().map(ClientAstronautDTO::getName)
+                                        .collect(Collectors.toList());
     }
 
     public List<String> getAstronautCraft(){
-        List<String> names = new ArrayList<>();
         AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
         assert astronautsInboundDTO != null;
-        astronautsInboundDTO.getPeople().forEach(astronaut -> names.add(astronaut.getCraft()));
-        return names;
+        return astronautsInboundDTO.getPeople().stream().map(ClientAstronautDTO::getCraft)
+                .collect(Collectors.toList());
     }
 
     public String getAstronautCraftByName(String name){

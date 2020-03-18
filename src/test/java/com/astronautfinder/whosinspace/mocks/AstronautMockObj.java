@@ -9,8 +9,8 @@ import static org.mockito.Mockito.mock;
 public class AstronautMockObj {
 
 
+    // mock creation
     public AstronautsInboundDTO returnMockedObject(){
-        // mock creation
         AstronautsInboundDTO mockedAstronaut = mock(AstronautsInboundDTO.class);
         List<ClientAstronautDTO> astronautDTOList = new ArrayList<>();
         astronautDTOList.add(new ClientAstronautDTO("ISS","TestOne"));
