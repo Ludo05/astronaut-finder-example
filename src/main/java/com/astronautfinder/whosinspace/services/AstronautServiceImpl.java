@@ -9,19 +9,26 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
 public class AstronautServiceImpl implements IAstronautService {
 
-//    @Value("${api.url}")
-    final String URL = "http://api.open-notify.org/astros.json";
-    RestTemplate restTemplate = new RestTemplate();
+    @Value("${api.url}")
+    String URL;
+
+    @Resource
+    private RestTemplate restTemplate;
+
     List<ClientAstronautDTO> astronauts = new ArrayList<>();
+
+    public AstronautServiceImpl(RestTemplate restTemplate){
+        this.restTemplate = restTemplate;
+    }
 
     private AstronautsInboundDTO getAstronautObject() {
         return restTemplate.getForObject(URL, AstronautsInboundDTO.class);
@@ -62,7 +69,7 @@ public class AstronautServiceImpl implements IAstronautService {
         AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
         assert astronautsInboundDTO != null;
         return astronautsInboundDTO.getPeople().stream().map(ClientAstronautDTO::getName)
-                                        .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     public List<String> getAstronautCraft(){
@@ -72,16 +79,12 @@ public class AstronautServiceImpl implements IAstronautService {
                 .collect(Collectors.toList());
     }
 
-    public String getAstronautCraftByName(String name){
+    public String getAstronautCraftByName(String name) {
         AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
         assert astronautsInboundDTO != null;
-        AtomicReference<String> craft = new AtomicReference<>("");
-        astronautsInboundDTO.getPeople().forEach(astronaut -> {
-            if(astronaut.getName().equals(name)){
-                craft.set(astronaut.getCraft());
-            }
-        });
-        return craft.get();
+        return astronautsInboundDTO.getPeople().stream().filter(astronaut -> astronaut.getName().equals(name))
+                .map(ClientAstronautDTO::getCraft)
+                .findFirst().get();
     }
 
     public List<String> getAstronautsByCraft(String craft) throws CraftNotAvailableException {
