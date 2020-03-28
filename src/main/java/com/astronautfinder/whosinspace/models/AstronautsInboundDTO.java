@@ -2,7 +2,8 @@ package com.astronautfinder.whosinspace.models;
 
 import java.util.List;
 
-public class AstronautsInboundDTO {
+public class
+AstronautsInboundDTO {
 
     public AstronautsInboundDTO(){}
 

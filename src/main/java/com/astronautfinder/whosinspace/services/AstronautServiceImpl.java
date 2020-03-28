@@ -12,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,7 +61,7 @@ public class AstronautServiceImpl implements IAstronautService {
         AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
         assert astronautsInboundDTO != null;
         return astronautsInboundDTO.getPeople().stream().map(ClientAstronautDTO::getName)
-                                        .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     public List<String> getAstronautCraft(){
@@ -72,30 +71,22 @@ public class AstronautServiceImpl implements IAstronautService {
                 .collect(Collectors.toList());
     }
 
-    public String getAstronautCraftByName(String name){
+    public String getAstronautCraftByName(String name) {
         AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
         assert astronautsInboundDTO != null;
-        AtomicReference<String> craft = new AtomicReference<>("");
-        astronautsInboundDTO.getPeople().forEach(astronaut -> {
-            if(astronaut.getName().equals(name)){
-                craft.set(astronaut.getCraft());
-            }
-        });
-        return craft.get();
+        return astronautsInboundDTO.getPeople().stream().filter(astronaut -> astronaut.getName().equals(name))
+                .map(ClientAstronautDTO::getCraft)
+                .findFirst().toString();
     }
 
     public List<String> getAstronautsByCraft(String craft) throws CraftNotAvailableException {
-        List<String> names = new ArrayList<>();
         AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
         if(astronautsInboundDTO == null) {
             throw new CraftNotAvailableException("Craft not found.");
         } else {
-            astronautsInboundDTO.getPeople().forEach(astronaut -> {
-                if (astronaut.getCraft().equals(craft)) {
-                    names.add(astronaut.getName());
-                }
-            });
-            return names;
+           return astronautsInboundDTO.getPeople().stream().filter(astronaut ->  astronaut.getCraft().equals(craft))
+                   .map(ClientAstronautDTO::getName)
+                   .collect(Collectors.toList());
         }
     }
 
