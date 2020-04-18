@@ -2,40 +2,45 @@ package com.astronautfinder.whosinspace;
 import com.astronautfinder.whosinspace.models.ClientAstronautDTO;
 import com.astronautfinder.whosinspace.services.AstronautServiceImpl;
 import com.astronautfinder.whosinspace.mocks.AstronautMockObj;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
-
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AstronautServiceTest {
 
-    @Mock private AstronautMockObj astronautMockObj;
-    @Spy private AstronautServiceImpl astronautService = new AstronautServiceImpl();
 
-    @Before
-    public void setUp() {
-        Mockito.when(astronautService.getAllAstronauts()).thenReturn(astronautMockObj.returnMockedObject());
-        Mockito.when(astronautService.addCraft(new ClientAstronautDTO())).thenReturn(astronautMockObj.returnMockedObject().getMessage());
-        Mockito.when(astronautService.getNumberOfAstronauts()).thenReturn(astronautMockObj.returnMockedObject().getPeople().size());
-        Mockito.when(astronautService.getAstronautNames()).thenReturn(Collections.singletonList("Hello"));
+    @Mock
+    RestTemplate restTemplate;
+
+    private AstronautServiceImpl astronautService;
+
+    @BeforeEach
+     void beforeAllTest() {
+          astronautService = new AstronautServiceImpl(restTemplate);
     }
 
     @Test
     public void AddAstronautTest(){
-        String result = astronautService.addCraft(new ClientAstronautDTO());
-        System.out.println(result);
-        assertEquals("Success",result);
+        ClientAstronautDTO clientAstronautDTO = new ClientAstronautDTO("TestCraft","TestName");
+        Mockito
+                .when(restTemplate.getForEntity("http://localhost:9090/astronaut/add", ClientAstronautDTO.class))
+                .thenReturn(new ResponseEntity(clientAstronautDTO, HttpStatus.OK));
+
+       String result = astronautService.getNumberOfAstronauts();
+       System.out.println(result);
+       assertEquals("Success",result);
     }
 
     @Test
