@@ -88,17 +88,13 @@ public class AstronautServiceImpl implements IAstronautService {
     }
 
     public List<String> getAstronautsByCraft(String craft) throws CraftNotAvailableException {
-        List<String> names = new ArrayList<>();
         AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
         if(astronautsInboundDTO == null) {
             throw new CraftNotAvailableException("Craft not found.");
         } else {
-            astronautsInboundDTO.getPeople().forEach(astronaut -> {
-                if (astronaut.getCraft().equals(craft)) {
-                    names.add(astronaut.getName());
-                }
-            });
-            return names;
+           return astronautsInboundDTO.getPeople().stream().filter(astronaut ->  astronaut.getCraft().equals(craft))
+                   .map(ClientAstronautDTO::getName)
+                   .collect(Collectors.toList());
         }
     }
 
