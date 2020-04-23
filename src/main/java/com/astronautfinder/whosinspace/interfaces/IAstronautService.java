@@ -12,14 +12,5 @@ public interface IAstronautService {
 
     AstronautsInboundDTO getAllAstronauts();
     int getNumberOfAstronauts() throws NoAstronautFoundException;
-    List<ClientAstronautDTO> getAstronautsArray() throws Exception;
     List<ClientAstronautDTO> getAstronautsArrayOrderedNames();
-    List<String> getAstronautNames();
-    List<String> getAstronautCraft();
-    String getAstronautCraftByName(String name);
-    List<String> getAstronautsByCraft(String craft) throws CraftNotAvailableException;
-    String addCraft(ClientAstronautDTO astronaut);
-    List<ClientAstronautDTO> getAstronautsFromLocal();
-
-
 }

@@ -24,13 +24,12 @@ public class AstronautServiceImpl implements IAstronautService {
     @Resource
     private RestTemplate restTemplate;
 
-    List<ClientAstronautDTO> astronauts = new ArrayList<>();
 
     public AstronautServiceImpl(RestTemplate restTemplate){
         this.restTemplate = restTemplate;
     }
 
-    private AstronautsInboundDTO getAstronautObject() {
+    public AstronautsInboundDTO getAstronautObject() {
         return restTemplate.getForObject(URL, AstronautsInboundDTO.class);
     }
 
@@ -47,63 +46,13 @@ public class AstronautServiceImpl implements IAstronautService {
         }
     }
 
-    public List<ClientAstronautDTO> getAstronautsArray() throws CraftNotAvailableException {
-        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
-        if(astronautsInboundDTO != null){
-        return astronautsInboundDTO.getPeople();
-        } else {
-            throw new CraftNotAvailableException("Where is my array");
-        }
-    }
-
     public List<ClientAstronautDTO> getAstronautsArrayOrderedNames() {
         AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
         assert astronautsInboundDTO != null;
         List<ClientAstronautDTO> astronautDTOList = astronautsInboundDTO.getPeople();
+        System.out.println(astronautDTOList.size());
         astronautDTOList.sort(Comparator.comparing(ClientAstronautDTO::getLastName));
         return astronautDTOList;
     }
 
-
-    public List<String> getAstronautNames(){
-        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
-        assert astronautsInboundDTO != null;
-        return astronautsInboundDTO.getPeople().stream().map(ClientAstronautDTO::getName)
-                .collect(Collectors.toList());
-    }
-
-    public List<String> getAstronautCraft(){
-        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
-        assert astronautsInboundDTO != null;
-        return astronautsInboundDTO.getPeople().stream().map(ClientAstronautDTO::getCraft)
-                .collect(Collectors.toList());
-    }
-
-    public String getAstronautCraftByName(String name) {
-        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
-        assert astronautsInboundDTO != null;
-        return astronautsInboundDTO.getPeople().stream().filter(astronaut -> astronaut.getName().equals(name))
-                .map(ClientAstronautDTO::getCraft)
-                .findFirst().get();
-    }
-
-    public List<String> getAstronautsByCraft(String craft) throws CraftNotAvailableException {
-        AstronautsInboundDTO astronautsInboundDTO = getAstronautObject();
-        if(astronautsInboundDTO == null) {
-            throw new CraftNotAvailableException("Craft not found.");
-        } else {
-           return astronautsInboundDTO.getPeople().stream().filter(astronaut ->  astronaut.getCraft().equals(craft))
-                   .map(ClientAstronautDTO::getName)
-                   .collect(Collectors.toList());
-        }
-    }
-
-    public String addCraft(ClientAstronautDTO astronaut) {
-        astronauts.add(astronaut);
-        return "Success";
-    }
-
-    public List<ClientAstronautDTO> getAstronautsFromLocal(){
-        return astronauts;
-    }
 }
